@@ -81,21 +81,23 @@ const lifeSpanGrid = new Grid(grid.width, grid.height, Float32Array);
 
 // engine
 
-function update(g) {
+function update(g, _dt, grids) {
+  const lifeGrid = grids[1].nextGrid;
+
   if (mouse.down) {
-    for (let dx = -2; dx <= 2; dx++) {
-      for (let dy = -2; dy <= 2; dy++) {
+    for (let dx = -1; dx <= 1; dx++) {
+      for (let dy = -1; dy <= 1; dy++) {
         const x = mouse.x + dx;
         const y = mouse.y + dy;
         g.set(x, y, 1);
-        lifeSpanGrid.set(x, y, 100);
+        lifeGrid.set(x, y, 100);
       }
     }
   }
 }
 
 function updateCell(current, next, x, y, _dt, grids) {
-  if (current.get(x, y) !== 1) return; // not sand
+  if (current.get(x, y) !== 1) return;
 
   const currentLife = grids[1].grid;
   const nextLife = grids[1].nextGrid;
@@ -112,7 +114,7 @@ function updateCell(current, next, x, y, _dt, grids) {
   const bottomR = { x: x+1, y: y + 1 };
   const bottomL = { x: x-1, y: y + 1 };
 
-  const isEmpty = (pos) => current.get(pos.x, pos.y) === 0;
+  const isEmpty = (pos) => (current.get(pos.x, pos.y) === 0) && (next.get(pos.x, pos.y) === 0);
 
   let dest = null;
   if (isEmpty(below)) dest = below;
@@ -138,13 +140,14 @@ function updateLifeSpan(_current, next, x, y, _dt, grids) {
 }
 
 const greenBeginnings = (v) => v === 1 ? [200, 200, 0, 255] : [255, 255, 255, 0];
-const yellowDeath = (v) => [50, 50, 200, v*2.5];
+const yellowDeath = (v) => [255, 255, 255, 255 - v*2.5];
 
 const engine = new MultiEngine({
   grids: [
     { grid: grid, updateCell: updateCell, update: update, dataToColor: greenBeginnings },
     { grid: lifeSpanGrid, updateCell: updateLifeSpan, dataToColor: yellowDeath },
-  ]
+  ],
+  scanOrder: "shuffle"
 });
 
 engine.start(renderer);
