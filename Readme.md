@@ -1,1 +1,1 @@
-You do npm start, then you go to http://localhost:3000/examples/vanilla
+ReadMe coming soon
