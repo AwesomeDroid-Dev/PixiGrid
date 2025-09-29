@@ -1,5 +1,5 @@
 import { Grid } from "../../src/core/grid.js";
-import { MultiEngine } from "../../src/core/multiEngine.js";
+import { Engine } from "../../src/core/engine.js";
 import { Renderer } from "../../src/core/renderer.js";
 import { Camera } from "../../src/core/camera.js";
 
@@ -82,7 +82,7 @@ const lifeSpanGrid = new Grid(grid.width, grid.height, Float32Array);
 // engine
 
 function update(g, _dt, grids) {
-  const lifeGrid = grids[1].nextGrid;
+  const lifeGrid = grids[1].grid;
 
   if (mouse.down) {
     for (let dx = -1; dx <= 1; dx++) {
@@ -110,29 +110,40 @@ function updateCell(current, next, x, y, _dt, grids) {
     return;
   }
 
-  const below   = { x,     y: y + 1 };
-  const bottomR = { x: x+1, y: y + 1 };
-  const bottomL = { x: x-1, y: y + 1 };
+  const belowX = x,     belowY = y + 1;
+  const rightX = x + 1, rightY = y + 1;
+  const leftX  = x - 1, leftY  = y + 1;
 
-  const isEmpty = (pos) => (current.get(pos.x, pos.y) === 0) && (next.get(pos.x, pos.y) === 0);
+  const isEmpty = (cx, cy) =>
+    current.get(cx, cy) === 0 && next.get(cx, cy) === 0;
 
-  let dest = null;
-  if (isEmpty(below)) dest = below;
-  else if (isEmpty(bottomR) && isEmpty(bottomL)) dest = Math.random() < 0.5 ? bottomR : bottomL;
-  else if (isEmpty(bottomR)) dest = bottomR;
-  else if (isEmpty(bottomL)) dest = bottomL;
-  
-  if (dest) {
-    next.set(dest.x, dest.y, 1);
-    nextLife.set(dest.x, dest.y, life);
+  let destX = x, destY = y; 
+
+  if (isEmpty(belowX, belowY)) {
+    destX = belowX; destY = belowY;
+  } else if (isEmpty(rightX, rightY) && isEmpty(leftX, leftY)) {
+    if (Math.random() < 0.5) {
+      destX = rightX; destY = rightY;
+    } else {
+      destX = leftX; destY = leftY;
+    }
+  } else if (isEmpty(rightX, rightY)) {
+    destX = rightX; destY = rightY;
+  } else if (isEmpty(leftX, leftY)) {
+    destX = leftX; destY = leftY;
+  }
+
+  if (destX !== x || destY !== y) {
+    next.set(destX, destY, 1);
+    nextLife.set(destX, destY, life);
     nextLife.set(x, y, 0);
   } else {
-    nextLife.set(x, y, life);
     next.set(x, y, 1);
+    nextLife.set(x, y, life);
   }
 }
 
-function updateLifeSpan(_current, next, x, y, _dt, grids) {
+function updateLifeSpan(_current, next, x, y, _dt, _grids) {
   const life = next.get(x, y);
   if (life > 0) {
     next.set(x, y, Math.max(0, life - 0.1));
@@ -140,9 +151,9 @@ function updateLifeSpan(_current, next, x, y, _dt, grids) {
 }
 
 const greenBeginnings = (v) => v === 1 ? [200, 200, 0, 255] : [255, 255, 255, 0];
-const yellowDeath = (v) => [255, 255, 255, 255 - v*2.5];
+const yellowDeath = (v) => [0, 200, 200, v*2.5];
 
-const engine = new MultiEngine({
+const engine = new Engine({
   grids: [
     { grid: grid, updateCell: updateCell, update: update, dataToColor: greenBeginnings },
     { grid: lifeSpanGrid, updateCell: updateLifeSpan, dataToColor: yellowDeath },
