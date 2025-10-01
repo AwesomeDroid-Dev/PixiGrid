@@ -21,6 +21,7 @@ PixiGrid is a lightweight JavaScript library for creating pixel-based grid inter
  - **Mult-Threading**: Implementing this would be great especially for grids that update more often than they are being rendered.
  - **Built-In Dirty Updating**: Could be done using available features right now, but would be better if it was built in.
  - **Refactoring Large Classes**: Needs to be done, since the code files are getting quite large.
+ - **Adding React Examples**: It would be great to see more examples of how to use PixiGrid.
 
 ## Installation
 
