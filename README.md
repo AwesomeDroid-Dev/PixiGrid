@@ -2,6 +2,8 @@
 
 PixiGrid is a lightweight JavaScript library for creating pixel-based grid interactive applications such as drawing tools, cellular automata simulations, and grid-based games. It provides a modular architecture with components for grid management, rendering, camera controls, and simulation engine.
 
+<img width="1305" height="722" alt="Screenshot 2025-10-01 064607" src="https://github.com/user-attachments/assets/1e1742db-f33b-487a-94d0-d5e42423dd94" />
+
 ## Features
 
 - **Grid System**: Efficient 2D grid data structure with multiple storage types (Uint8Array, Int16Array, etc.)
