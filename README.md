@@ -1,6 +1,6 @@
-# Pixel Canvas JS
+# PixiGrid
 
-Pixel Canvas JS is a lightweight JavaScript library for creating pixel-based interactive applications such as drawing tools, cellular automata simulations, and grid-based games. It provides a modular architecture with components for grid management, rendering, camera controls, and simulation engine.
+PixiGrid is a lightweight JavaScript library for creating pixel-based grid interactive applications such as drawing tools, cellular automata simulations, and grid-based games. It provides a modular architecture with components for grid management, rendering, camera controls, and simulation engine.
 
 ## Features
 
@@ -17,7 +17,7 @@ Pixel Canvas JS is a lightweight JavaScript library for creating pixel-based int
  - **Event System**: Just a simple event system for handling mouse and touch interactions. It should make implementing faster and more compact, as well as more visually appealing.
  - **Dirty Rendering**: Only render cells that have changed since the last frame.
  - **Mult-Threading**: Implementing this would be great especially for grids that update more often than they are being rendered.
- - **Built-In Dirty Updating**: Could be done using available feautes right now, but would be better if it was built in.
+ - **Built-In Dirty Updating**: Could be done using available features right now, but would be better if it was built in.
  - **Refactoring Large Classes**: Needs to be done, since the code files are getting quite large.
 
 ## Installation
